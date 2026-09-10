@@ -1,0 +1,82 @@
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.sidebar {
+  width: 260px;
+  background: rgba(15, 23, 42, 0.9);
+  border-right: 1px solid var(--card-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarBrand {
+  padding: 2rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border-bottom: 1px solid var(--card-border);
+  color: var(--accent-color);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  flex: 1;
+}
+
+.nav a {
+  padding: 1rem 2rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: var(--transition);
+  border-left: 3px solid transparent;
+}
+
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.nav a.active {
+  color: var(--accent-color);
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: var(--accent-color);
+}
+
+.logoutBtn {
+  margin: 1.5rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.logoutBtn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.content {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  color: var(--text-muted);
+}

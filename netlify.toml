@@ -1,0 +1,9 @@
+[build]
+  command = "npm install && npx prisma generate && npx prisma db push && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PRIVATE_STANDALONE = "true"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

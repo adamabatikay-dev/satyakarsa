@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Criteria {
+  id     Int    @id @default(autoincrement())
+  name   String
+  type   String // "benefit" or "cost"
+  weight Float
+
+  scores AlternativeScore[]
+}
+
+model Alternative {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  scores AlternativeScore[]
+}
+
+model AlternativeScore {
+  id            Int @id @default(autoincrement())
+  alternativeId Int
+  criteriaId    Int
+  value         Float
+
+  alternative Alternative @relation(fields: [alternativeId], references: [id], onDelete: Cascade)
+  criteria    Criteria    @relation(fields: [criteriaId], references: [id], onDelete: Cascade)
+
+  @@unique([alternativeId, criteriaId])
+}
+
+model IdentityField {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String   // "text", "number", "select"
+  options   String?  // comma-separated for select
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model RecommendationRecord {
+  id                 Int      @id @default(autoincrement())
+  identityData       String   // JSON string of user identity
+  topAlternativeId   Int
+  topAlternativeName String
+  score              Float
+  createdAt          DateTime @default(now())
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  name      String?
+  message   String
+  createdAt DateTime @default(now())
+}
