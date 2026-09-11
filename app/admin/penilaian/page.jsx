@@ -41,7 +41,7 @@ export default function AdminPenilaian() {
   const handleInputChange = (altId, critId, value) => {
     setMatrix(prev => ({
       ...prev,
-      [`${altId}-${critId}`]: parseFloat(value) || 0
+      [`${altId}-${critId}`]: value
     }));
   };
 
@@ -60,7 +60,7 @@ export default function AdminPenilaian() {
       return {
         alternativeId: parseInt(altId),
         criteriaId: parseInt(critId),
-        value: matrix[key]
+        value: parseFloat(matrix[key]) || 0
       };
     });
 
@@ -142,6 +142,7 @@ export default function AdminPenilaian() {
                     <td key={c.id} style={{ padding: '1rem' }}>
                       <input 
                         type="number"
+                        step="0.0001"
                         className="input-field"
                         style={{ padding: '8px', width: '100px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--card-border)' }}
                         value={matrix[key] !== undefined ? matrix[key] : ''}
