@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './page.module.css';
@@ -55,45 +55,7 @@ export default function Hasil() {
         <p className={styles.subtitle}>Sistem Pendukung Keputusan Pemilihan Platform Promosi Digital</p>
       </div>
 
-      {/* Top Result Analysis */}
-      <div className={`glass-panel ${styles.sectionBox}`}>
-        <h3 className={styles.sectionTitle}>Analisis Pemenang: {topPlatform.alternativeName}</h3>
-        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          Rincian perhitungan nilai preferensi untuk alternatif terbaik
-        </p>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {criteria.map(c => {
-            const weightVal = topPlatform.details[c.id] || 0; // Final weighted score
-            const normVal = topPlatform.normalizedValues[c.id] || 0; // Normalized score
-            return (
-              <div key={c.id} style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ 
-                  background: 'rgba(255,255,255,0.1)', 
-                  padding: '4px 12px', 
-                  borderRadius: '4px', 
-                  fontSize: '0.8rem', 
-                  marginRight: '1.5rem',
-                  minWidth: '80px',
-                  textAlign: 'center'
-                }}>
-                  {c.type === 'cost' ? '📉 Cost' : '📈 Benefit'}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.25rem' }}>{c.name}</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                    Normalisasi: {normVal.toFixed(4)}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.2rem' }}>Skor Akhir</div>
-                  <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: 'var(--accent-color)' }}>{weightVal.toFixed(4)}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+
 
       {/* Detailed Rankings Table */}
       <div className={`glass-panel ${styles.sectionBox}`}>
@@ -114,16 +76,53 @@ export default function Hasil() {
             </thead>
             <tbody>
               {results.map((res, index) => (
-                <tr key={res.alternativeId} className={index === 0 ? styles.rowTop : ''}>
-                  <td>
-                    <span className={index === 0 ? styles.badgeTop : styles.badgeNormal}>
-                      #{index + 1}
-                    </span>
-                  </td>
-                  <td style={{ fontWeight: 'bold' }}>{res.alternativeName}</td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{res.description}</td>
-                  <td style={{ textAlign: 'center', fontWeight: 'bold' }}>{res.totalScore.toFixed(4)}</td>
-                </tr>
+                <React.Fragment key={res.alternativeId}>
+                  <tr 
+                    className={index === 0 ? styles.rowTop : ''}
+                    style={{ cursor: 'pointer', transition: 'background 0.2s' }}
+                    onClick={() => setExpanded(expanded === res.alternativeId ? null : res.alternativeId)}
+                    onMouseEnter={(e) => {
+                      if (index !== 0) e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                    }}
+                    onMouseLeave={(e) => {
+                      if (index !== 0) e.currentTarget.style.background = 'transparent';
+                    }}
+                  >
+                    <td>
+                      <span className={index === 0 ? styles.badgeTop : styles.badgeNormal}>
+                        #{index + 1}
+                      </span>
+                    </td>
+                    <td style={{ fontWeight: 'bold' }}>
+                      {res.alternativeName}
+                      <span style={{ marginLeft: '10px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        {expanded === res.alternativeId ? '▲' : '▼'}
+                      </span>
+                    </td>
+                    <td style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{res.description}</td>
+                    <td style={{ textAlign: 'center', fontWeight: 'bold' }}>{res.totalScore.toFixed(4)}</td>
+                  </tr>
+                  {expanded === res.alternativeId && (
+                    <tr style={{ background: 'rgba(0,0,0,0.2)' }}>
+                      <td colSpan="4" style={{ padding: '1.5rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                        <h4 style={{ marginBottom: '1rem', color: 'var(--accent-color)' }}>Analisis Perhitungan Kriteria</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                          {criteria.map(c => {
+                            const weightVal = res.details[c.id] || 0;
+                            const normVal = res.normalizedValues[c.id] || 0;
+                            return (
+                              <div key={c.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-color)' }}>
+                                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>{c.name}</div>
+                                <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Normalisasi: {normVal.toFixed(4)}</div>
+                                <div style={{ fontWeight: 'bold', marginTop: '0.25rem' }}>Skor Akhir: <span style={{ color: 'var(--accent-color)' }}>{weightVal.toFixed(4)}</span></div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
