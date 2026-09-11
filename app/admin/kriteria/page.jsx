@@ -7,6 +7,7 @@ import PasswordModal from '../../../components/PasswordModal';
 export default function AdminKriteria() {
   const [kriteria, setKriteria] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
 
   // Form states
   const [editId, setEditId] = useState(null);
@@ -27,6 +28,39 @@ export default function AdminKriteria() {
   useEffect(() => {
     fetchKriteria();
   }, []);
+
+  const sortedKriteria = useMemo(() => {
+    let sortableItems = [...kriteria];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        let valA = a[sortConfig.key];
+        let valB = b[sortConfig.key];
+        
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+        
+        if (sortConfig.key === 'weight') {
+           valA = parseFloat(valA);
+           valB = parseFloat(valB);
+        }
+
+        if (valA < valB) return sortConfig.direction === 'ascending' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'ascending' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [kriteria, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
 
   // Calculate current total weight
   const currentTotalWeight = useMemo(() => {
@@ -243,17 +277,25 @@ export default function AdminKriteria() {
         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--card-border)' }}>
-              <th style={{ padding: '1rem' }}>ID</th>
-              <th style={{ padding: '1rem' }}>Nama Kriteria</th>
-              <th style={{ padding: '1rem' }}>Tipe</th>
-              <th style={{ padding: '1rem' }}>Bobot Default</th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('id')}>
+                No {sortConfig.key === 'id' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('name')}>
+                Nama Kriteria {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('type')}>
+                Tipe {sortConfig.key === 'type' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('weight')}>
+                Bobot Default {sortConfig.key === 'weight' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
               <th style={{ padding: '1rem', textAlign: 'right' }}>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {kriteria.map(c => (
+            {sortedKriteria.map((c, index) => (
               <tr key={c.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <td style={{ padding: '1rem' }}>{c.id}</td>
+                <td style={{ padding: '1rem' }}>{index + 1}</td>
                 <td style={{ padding: '1rem' }}>{c.name}</td>
                 <td style={{ padding: '1rem' }}>
                   <span style={{ 

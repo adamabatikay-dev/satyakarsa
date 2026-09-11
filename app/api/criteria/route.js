@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 
 export async function GET() {
-  const criteria = await prisma.criteria.findMany();
+  const criteria = await prisma.criteria.findMany({
+    orderBy: { id: 'asc' }
+  });
   return NextResponse.json(criteria);
 }
 
