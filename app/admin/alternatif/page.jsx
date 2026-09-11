@@ -7,6 +7,7 @@ import PasswordModal from '../../../components/PasswordModal';
 export default function AdminAlternatif() {
   const [alternatives, setAlternatives] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
 
   // Form states
   const [name, setName] = useState('');
@@ -25,6 +26,34 @@ export default function AdminAlternatif() {
   useEffect(() => {
     fetchAlternatives();
   }, []);
+
+  const sortedAlternatives = useMemo(() => {
+    let sortableItems = [...alternatives];
+    if (sortConfig.key !== null) {
+      sortableItems.sort((a, b) => {
+        let valA = a[sortConfig.key];
+        let valB = b[sortConfig.key];
+        
+        if (typeof valA === 'string') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+
+        if (valA < valB) return sortConfig.direction === 'ascending' ? -1 : 1;
+        if (valA > valB) return sortConfig.direction === 'ascending' ? 1 : -1;
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [alternatives, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
 
   const initiateSave = (e) => {
     e.preventDefault();
@@ -123,16 +152,22 @@ export default function AdminAlternatif() {
         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--card-border)' }}>
-              <th style={{ padding: '1rem' }}>ID</th>
-              <th style={{ padding: '1rem' }}>Nama Platform</th>
-              <th style={{ padding: '1rem' }}>Deskripsi</th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('id')}>
+                No {sortConfig.key === 'id' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('name')}>
+                Nama Platform {sortConfig.key === 'name' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
+              <th style={{ padding: '1rem', cursor: 'pointer', userSelect: 'none' }} onClick={() => requestSort('description')}>
+                Deskripsi {sortConfig.key === 'description' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : '↕'}
+              </th>
               <th style={{ padding: '1rem', textAlign: 'right' }}>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {alternatives.map(a => (
+            {sortedAlternatives.map((a, index) => (
               <tr key={a.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <td style={{ padding: '1rem' }}>{a.id}</td>
+                <td style={{ padding: '1rem' }}>{index + 1}</td>
                 <td style={{ padding: '1rem', fontWeight: 'bold' }}>{a.name}</td>
                 <td style={{ padding: '1rem', color: 'var(--text-muted)' }}>{a.description}</td>
                 <td style={{ padding: '1rem', textAlign: 'right' }}>

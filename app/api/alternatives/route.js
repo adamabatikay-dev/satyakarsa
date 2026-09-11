@@ -3,6 +3,7 @@ import prisma from '../../../lib/prisma';
 
 export async function GET() {
   const alternatives = await prisma.alternative.findMany({
+    orderBy: { id: 'asc' },
     include: { scores: true }
   });
   return NextResponse.json(alternatives);
