@@ -51,7 +51,7 @@ export default function AdminKriteria() {
     return '#4ade80'; // Green
   };
 
-  const diffProjected = Math.abs(1 - projectedTotal).toFixed(2);
+  const diffProjected = Math.abs(1 - projectedTotal).toFixed(4);
   let projectedWarning = null;
   if (projectedTotal > 1.001) {
     projectedWarning = `Kelebihan ${diffProjected} (Melebihi batas 1.00)`;
@@ -67,7 +67,7 @@ export default function AdminKriteria() {
 
     // Block saving if total is greater than 1
     if (projectedTotal > 1.001) {
-      alert(`Gagal menyimpan: Total bobot saat ini akan menjadi ${projectedTotal.toFixed(2)}. Harap perbaiki isian agar keseluruhan bobot tidak melebihi 1.00.`);
+      alert(`Gagal menyimpan: Total bobot saat ini akan menjadi ${projectedTotal.toFixed(4)}. Harap perbaiki isian agar keseluruhan bobot tidak melebihi 1.00.`);
       return;
     }
 
@@ -164,11 +164,11 @@ export default function AdminKriteria() {
       >
         <div>
           <h3 style={{ marginBottom: '0.25rem', color: currentTotalColor }}>
-            Total Bobot Saat Ini: {currentTotalWeight.toFixed(2)}
+            Total Bobot Saat Ini: {currentTotalWeight.toFixed(4)}
           </h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            {currentTotalWeight > 1.001 && `Peringatan: Bobot saat ini kelebihan ${Math.abs(1 - currentTotalWeight).toFixed(2)} dari target 1.00 (Nilai harus diperbaiki)`}
-            {currentTotalWeight < 0.999 && `Perhatian: Bobot saat ini masih kurang ${(1 - currentTotalWeight).toFixed(2)} untuk mencapai target 1.00`}
+            {currentTotalWeight > 1.001 && `Peringatan: Bobot saat ini kelebihan ${Math.abs(1 - currentTotalWeight).toFixed(4)} dari target 1.00 (Nilai harus diperbaiki)`}
+            {currentTotalWeight < 0.999 && `Perhatian: Bobot saat ini masih kurang ${(1 - currentTotalWeight).toFixed(4)} untuk mencapai target 1.00`}
             {Math.abs(currentTotalWeight - 1) <= 0.001 && `Bagus! Total bobot sudah tepat 1.00`}
           </p>
         </div>
@@ -208,7 +208,7 @@ export default function AdminKriteria() {
               value={weight}
               onChange={e => setWeight(e.target.value)}
               placeholder="Max 1.00"
-              step="0.01"
+              step="0.0001"
               required 
             />
           </div>
@@ -233,7 +233,7 @@ export default function AdminKriteria() {
           }}>
             <span style={{ color: 'var(--text-muted)' }}>Prediksi Total Jika Disimpan: </span>
             <strong style={{ color: projectedTotalColor }}>
-              {projectedTotal.toFixed(2)} ({projectedWarning})
+              {projectedTotal.toFixed(4)} ({projectedWarning})
             </strong>
           </div>
         )}
@@ -266,7 +266,7 @@ export default function AdminKriteria() {
                     {c.type.toUpperCase()}
                   </span>
                 </td>
-                <td style={{ padding: '1rem' }}>{parseFloat(c.weight).toFixed(2)}</td>
+                <td style={{ padding: '1rem' }}>{parseFloat(c.weight).toFixed(4)}</td>
                 <td style={{ padding: '1rem', textAlign: 'right' }}>
                   <button onClick={() => handleEditClick(c)} style={{ color: 'var(--accent-color)', marginRight: '1rem', fontSize: '0.9rem' }}>Edit</button>
                   <button onClick={() => initiateDelete(c.id)} style={{ color: '#ef4444', fontSize: '0.9rem' }}>Hapus</button>
@@ -290,7 +290,7 @@ export default function AdminKriteria() {
                   fontWeight: 'bold', 
                   color: currentTotalColor
                 }}>
-                  {currentTotalWeight.toFixed(2)}
+                  {currentTotalWeight.toFixed(4)}
                 </td>
                 <td></td>
               </tr>
