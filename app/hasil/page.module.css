@@ -153,3 +153,58 @@
 .homeLink:hover {
   color: var(--text-main);
 }
+
+.sectionBox {
+  margin-bottom: 3rem;
+  padding: 2.5rem;
+  text-align: left;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+}
+
+.rankingTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.rankingTable th {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.rankingTable td {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.rowTop {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.05) 0%, transparent 100%);
+}
+
+.badgeTop {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.badgeNormal {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-muted);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
