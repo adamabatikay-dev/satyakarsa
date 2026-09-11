@@ -48,11 +48,6 @@ export default function Hasil() {
 
   const topPlatform = results[0];
 
-  // Helper to calculate percentage like in the screenshot (Score * 100)
-  const getPercentage = (score) => {
-    return (score * 100).toFixed(2);
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -60,17 +55,17 @@ export default function Hasil() {
         <p className={styles.subtitle}>Sistem Pendukung Keputusan Pemilihan Platform Promosi Digital</p>
       </div>
 
-      {/* Criteria Overview Section */}
+      {/* Top Result Analysis */}
       <div className={`glass-panel ${styles.sectionBox}`}>
-        <h3 className={styles.sectionTitle}>Ringkasan Kriteria</h3>
+        <h3 className={styles.sectionTitle}>Analisis Pemenang: {topPlatform.alternativeName}</h3>
         <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          {criteria.length} kriteria evaluasi yang digunakan
+          Rincian perhitungan nilai preferensi untuk alternatif terbaik
         </p>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {criteria.map(c => {
-            // Find user weight from results details or fallback to default
-            const weightVal = topPlatform.details[c.id] ? (topPlatform.details[c.id] / (topPlatform.normalizedValues[c.id] || 1)) : c.weight;
+            const weightVal = topPlatform.details[c.id] || 0; // Final weighted score
+            const normVal = topPlatform.normalizedValues[c.id] || 0; // Normalized score
             return (
               <div key={c.id} style={{ display: 'flex', alignItems: 'center', background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
                 <div style={{ 
@@ -86,10 +81,13 @@ export default function Hasil() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '0.25rem' }}>{c.name}</div>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                    Normalisasi: {normVal.toFixed(4)}
+                  </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{weightVal.toFixed(2)}</div>
-                  <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{(weightVal * 100).toFixed(0)}%</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.2rem' }}>Skor Akhir</div>
+                  <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: 'var(--accent-color)' }}>{weightVal.toFixed(4)}</div>
                 </div>
               </div>
             );
@@ -112,7 +110,6 @@ export default function Hasil() {
                 <th>Alternatif</th>
                 <th>Deskripsi</th>
                 <th style={{ textAlign: 'center' }}>Nilai Preferensi</th>
-                <th style={{ textAlign: 'center' }}>Persentase</th>
               </tr>
             </thead>
             <tbody>
@@ -126,9 +123,6 @@ export default function Hasil() {
                   <td style={{ fontWeight: 'bold' }}>{res.alternativeName}</td>
                   <td style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{res.description}</td>
                   <td style={{ textAlign: 'center', fontWeight: 'bold' }}>{res.totalScore.toFixed(4)}</td>
-                  <td style={{ textAlign: 'center', color: 'var(--accent-color)', fontWeight: 'bold' }}>
-                    {getPercentage(res.totalScore)}%
-                  </td>
                 </tr>
               ))}
             </tbody>
