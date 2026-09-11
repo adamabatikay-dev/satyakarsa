@@ -109,7 +109,7 @@ export default function AdminPenilaian() {
       />
 
       <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Matriks Penilaian</h1>
+        <h1 className={styles.pageTitle}>Matriks Keputusan</h1>
         <p className={styles.pageSubtitle}>Input manual nilai mentah setiap alternatif terhadap kriteria</p>
       </div>
 

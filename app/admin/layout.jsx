@@ -42,7 +42,7 @@ export default function AdminLayout({ children }) {
           <Link href="/admin" className={pathname === '/admin' ? styles.active : ''}>Dashboard</Link>
           <Link href="/admin/kriteria" className={pathname === '/admin/kriteria' ? styles.active : ''}>Data Kriteria</Link>
           <Link href="/admin/alternatif" className={pathname === '/admin/alternatif' ? styles.active : ''}>Data Alternatif</Link>
-          <Link href="/admin/penilaian" className={pathname === '/admin/penilaian' ? styles.active : ''}>Matriks Penilaian</Link>
+          <Link href="/admin/penilaian" className={pathname === '/admin/penilaian' ? styles.active : ''}>Matriks Keputusan</Link>
           
           <div style={{ marginTop: '1rem', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', textTransform: 'uppercase', paddingLeft: '1.5rem', fontWeight: 'bold' }}>Fitur Ekstra</div>
           
