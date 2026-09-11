@@ -21,20 +21,27 @@ export default function AdminPenilaian() {
 
   const fetchData = () => {
     Promise.all([
-      fetch('/api/alternatives').then(res => res.json()),
-      fetch('/api/criteria').then(res => res.json())
+      fetch('/api/alternatives').then(res => res.ok ? res.json() : []),
+      fetch('/api/criteria').then(res => res.ok ? res.json() : [])
     ]).then(([alts, crits]) => {
-      setAlternatives(alts);
-      setCriteria(crits);
+      const validAlts = Array.isArray(alts) ? alts : [];
+      const validCrits = Array.isArray(crits) ? crits : [];
+      
+      setAlternatives(validAlts);
+      setCriteria(validCrits);
       
       // Initialize matrix state from existing data
       const initialMatrix = {};
-      alts.forEach(a => {
-        a.scores.forEach(s => {
-          initialMatrix[`${a.id}-${s.criteriaId}`] = s.value;
-        });
+      validAlts.forEach(a => {
+        if (a && Array.isArray(a.scores)) {
+          a.scores.forEach(s => {
+            initialMatrix[`${a.id}-${s.criteriaId}`] = s.value;
+          });
+        }
       });
       setMatrix(initialMatrix);
+    }).catch(err => {
+      console.error("Failed to fetch data:", err);
     });
   };
 
@@ -133,19 +140,19 @@ export default function AdminPenilaian() {
             </tr>
           </thead>
           <tbody>
-            {alternatives.map(a => (
-              <tr key={a.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+            {Array.isArray(alternatives) && alternatives.map(a => (
+              <tr key={a.id || Math.random()} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                 <td style={{ padding: '1rem', fontWeight: 'bold' }}>{a.name}</td>
-                {criteria.map(c => {
+                {Array.isArray(criteria) && criteria.map(c => {
                   const key = `${a.id}-${c.id}`;
                   return (
-                    <td key={c.id} style={{ padding: '1rem' }}>
+                    <td key={c.id || Math.random()} style={{ padding: '1rem' }}>
                       <input 
                         type="number"
                         step="0.0001"
                         className="input-field"
                         style={{ padding: '8px', width: '100px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--card-border)' }}
-                        value={matrix[key] !== undefined ? matrix[key] : ''}
+                        value={matrix && matrix[key] !== undefined ? matrix[key] : ''}
                         onChange={(e) => handleInputChange(a.id, c.id, e.target.value)}
                         placeholder="Nilai..."
                       />
@@ -154,10 +161,10 @@ export default function AdminPenilaian() {
                 })}
               </tr>
             ))}
-            {alternatives.length === 0 && (
+            {(!Array.isArray(alternatives) || alternatives.length === 0) && (
               <tr>
-                <td colSpan={criteria.length + 1} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  Data alternatif belum tersedia.
+                <td colSpan={Array.isArray(criteria) ? criteria.length + 1 : 1} style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                  Data alternatif belum tersedia atau terjadi kesalahan saat memuat data.
                 </td>
               </tr>
             )}
