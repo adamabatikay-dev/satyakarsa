@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import styles from '../layout.module.css';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 export default function AdminRiwayat() {
   const [records, setRecords] = useState([]);
@@ -15,6 +16,19 @@ export default function AdminRiwayat() {
         setLoading(false);
       });
   }, []);
+
+  const chartData = useMemo(() => {
+    const counts = {};
+    records.forEach(r => {
+      counts[r.topAlternativeName] = (counts[r.topAlternativeName] || 0) + 1;
+    });
+    return Object.keys(counts).map(key => ({
+      name: key,
+      count: counts[key]
+    })).sort((a, b) => b.count - a.count);
+  }, [records]);
+  
+  const colors = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#6366f1'];
 
   // Helper to parse JSON identity data safely
   const renderIdentity = (jsonStr) => {
@@ -46,6 +60,30 @@ export default function AdminRiwayat() {
         <h1 className={styles.pageTitle}>Riwayat Rekomendasi</h1>
         <p className={styles.pageSubtitle}>Log hasil sistem rekomendasi yang telah diberikan kepada publik</p>
       </div>
+
+      {!loading && chartData.length > 0 && (
+        <div className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem' }}>
+          <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Statistik Platform Terbaik</h3>
+          <div style={{ width: '100%', height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                <XAxis dataKey="name" stroke="var(--text-muted)" tick={{fill: 'var(--text-muted)'}} />
+                <YAxis stroke="var(--text-muted)" tick={{fill: 'var(--text-muted)'}} allowDecimals={false} />
+                <Tooltip 
+                  cursor={{fill: 'rgba(255,255,255,0.05)'}} 
+                  contentStyle={{ backgroundColor: 'var(--bg-color)', borderColor: 'var(--card-border)', borderRadius: '8px', color: 'var(--text-main)' }}
+                  itemStyle={{ color: 'var(--text-main)', fontWeight: 'bold' }}
+                />
+                <Bar dataKey="count" name="Total Keputusan" radius={[6, 6, 0, 0]}>
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       <div className="glass-panel" style={{ padding: '2rem', overflowX: 'auto' }}>
         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse', minWidth: '800px' }}>
