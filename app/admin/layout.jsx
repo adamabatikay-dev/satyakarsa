@@ -46,6 +46,7 @@ export default function AdminLayout({ children }) {
           
           <div style={{ marginTop: '1rem', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', textTransform: 'uppercase', paddingLeft: '1.5rem', fontWeight: 'bold' }}>Fitur Ekstra</div>
           
+          <Link href="/admin/akun" className={pathname === '/admin/akun' ? styles.active : ''}>Pengaturan Akun</Link>
           <Link href="/admin/identitas" className={pathname === '/admin/identitas' ? styles.active : ''}>Pengaturan Identitas</Link>
           <Link href="/admin/riwayat" className={pathname === '/admin/riwayat' ? styles.active : ''}>Riwayat Rekomendasi</Link>
           <Link href="/admin/feedback" className={pathname === '/admin/feedback' ? styles.active : ''}>Saran & Kritik</Link>

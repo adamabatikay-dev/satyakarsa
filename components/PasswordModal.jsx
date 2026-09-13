@@ -4,17 +4,33 @@ import { useState } from 'react';
 export default function PasswordModal({ isOpen, onClose, onConfirm, title, message }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === 'admin123') { // Hardcoded for this prototype
-      setError('');
-      setPassword('');
-      onConfirm();
-    } else {
-      setError('Password salah! Proses dibatalkan.');
+    setIsVerifying(true);
+    
+    try {
+      const res = await fetch('/api/auth/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        setError('');
+        onConfirm();
+        setPassword('');
+      } else {
+        setError(data.message || 'Password salah!');
+      }
+    } catch (err) {
+      setError('Terjadi kesalahan koneksi');
+    } finally {
+      setIsVerifying(false);
     }
   };
 

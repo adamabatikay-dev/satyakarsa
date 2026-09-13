@@ -10,14 +10,24 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Hardcoded for demo/prototype as discussed in plan
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('admin_auth', 'true');
-      router.push('/admin');
-    } else {
-      alert('Username atau password salah!');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.success) {
+        localStorage.setItem('admin_auth', 'true');
+        router.push('/admin');
+      } else {
+        alert(data.message || 'Username atau password salah!');
+      }
+    } catch (err) {
+      alert('Terjadi kesalahan koneksi saat login');
     }
   };
 
