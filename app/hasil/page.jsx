@@ -143,7 +143,7 @@ export default function Hasil() {
         <Link href="/kuesioner" className="btn-primary">
           Ulangi Kuesioner
         </Link>
-        <Link href="/saran" className="btn-primary" style={{ background: 'var(--card-bg)', color: 'var(--text-main)', border: '1px solid var(--card-border)' }}>
+        <Link href="/feedback" className="btn-primary" style={{ background: 'var(--card-bg)', color: 'var(--text-main)', border: '1px solid var(--card-border)' }}>
           Kirim Saran & Kritik
         </Link>
         <Link href="/" className={styles.homeLink}>
