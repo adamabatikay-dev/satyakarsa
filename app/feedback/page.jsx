@@ -37,18 +37,17 @@ export default function Feedback() {
   return (
     <div className={styles.container}>
       <div className={`glass-panel ${styles.formCard}`}>
-        <div style={{ marginBottom: '2rem' }}>
-          <Link href="/" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>&larr; Kembali ke Beranda</Link>
-        </div>
-
-        <h2 className={styles.title}>Saran & Kritik</h2>
+        <h2 className={styles.title} style={{ marginTop: 0 }}>Saran & Kritik</h2>
         <p className={styles.desc}>Kami sangat menghargai masukan Anda untuk pengembangan sistem SPK ini ke depannya.</p>
         
         {success ? (
           <div style={{ padding: '2rem', textAlign: 'center', background: 'rgba(34, 197, 94, 0.1)', borderRadius: '12px', border: '1px solid rgba(34, 197, 94, 0.2)' }}>
             <h3 style={{ color: '#4ade80', marginBottom: '1rem' }}>Terima Kasih!</h3>
             <p>Pesan Anda telah berhasil dikirim ke sistem kami.</p>
-            <button onClick={() => setSuccess(false)} className="btn-primary" style={{ marginTop: '1.5rem' }}>Kirim Pesan Lain</button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.5rem' }}>
+              <button onClick={() => setSuccess(false)} className="btn-primary">Kirim Pesan Lain</button>
+              <Link href="/" className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-main)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>Kembali ke Beranda</Link>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className={styles.form}>
@@ -77,9 +76,12 @@ export default function Feedback() {
               />
             </div>
 
-            <button type="submit" className={`btn-primary ${styles.submitBtn}`} disabled={loading}>
-              {loading ? 'Mengirim...' : 'Kirim Pesan'}
-            </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+              <button type="submit" className={`btn-primary ${styles.submitBtn}`} disabled={loading} style={{ margin: 0 }}>
+                {loading ? 'Mengirim...' : 'Kirim Pesan'}
+              </button>
+              <Link href="/" className="btn-primary" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-main)', border: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>Kembali ke Beranda</Link>
+            </div>
           </form>
         )}
       </div>
