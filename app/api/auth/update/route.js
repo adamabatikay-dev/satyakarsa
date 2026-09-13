@@ -4,10 +4,15 @@ import bcrypt from 'bcryptjs';
 
 export async function PUT(request) {
   try {
-    const { currentPassword, newUsername, newPassword } = await request.json();
+    const { adminId, currentPassword, newUsername, newPassword } = await request.json();
 
-    // Ambil admin pertama (kita asumsikan hanya ada 1 admin untuk platform ini)
-    const admin = await prisma.adminUser.findFirst();
+    if (!adminId) {
+      return NextResponse.json({ success: false, message: 'ID Admin tidak disertakan' }, { status: 400 });
+    }
+
+    const admin = await prisma.adminUser.findUnique({
+      where: { id: parseInt(adminId) }
+    });
 
     if (!admin) {
       return NextResponse.json({ success: false, message: 'Admin tidak ditemukan' }, { status: 404 });

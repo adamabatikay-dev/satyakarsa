@@ -66,4 +66,17 @@ model AdminUser {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
+
+  accessLogs AdminAccessLog[]
+}
+
+model AdminAccessLog {
+  id          Int        @id @default(autoincrement())
+  adminId     Int?
+  admin       AdminUser? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  username    String?
+  ipAddress   String?
+  userAgent   String?
+  status      String
+  accessedAt  DateTime   @default(now())
 }

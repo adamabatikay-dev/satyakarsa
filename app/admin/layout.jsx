@@ -31,6 +31,7 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem('admin_auth');
+    localStorage.removeItem('admin_id');
     router.push('/admin/login');
   };
 

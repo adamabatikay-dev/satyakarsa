@@ -22,6 +22,7 @@ export default function AdminLogin() {
       
       if (res.ok && data.success) {
         localStorage.setItem('admin_auth', 'true');
+        localStorage.setItem('admin_id', data.adminId);
         router.push('/admin');
       } else {
         alert(data.message || 'Username atau password salah!');
