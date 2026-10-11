@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import styles from '../layout.module.css';
 import PasswordModal from '../../../components/PasswordModal';
 
@@ -118,6 +119,38 @@ export default function AdminPenilaian() {
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Matriks Keputusan</h1>
         <p className={styles.pageSubtitle}>Input manual nilai mentah setiap alternatif terhadap kriteria</p>
+      </div>
+
+      {/* Dynamic Feedback Loop Banner */}
+      <div className="glass-panel" style={{ 
+        padding: '1.25rem 1.5rem', 
+        marginBottom: '1.5rem', 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        flexWrap: 'wrap', 
+        gap: '1rem',
+        borderLeft: '4px solid #60a5fa',
+        background: 'rgba(59, 130, 246, 0.08)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span style={{ fontSize: '1.5rem' }}>🔄</span>
+          <div>
+            <strong style={{ color: 'var(--text-main)', display: 'block', fontSize: '0.95rem' }}>
+              Terintegrasi dengan Dynamic Feedback Loop
+            </strong>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+              Matriks keputusan ini dapat diperbarui secara otomatis dan berkala berdasarkan akumulasi penilaian responden baru.
+            </span>
+          </div>
+        </div>
+        <Link 
+          href="/admin/feedback-loop"
+          className="btn-primary"
+          style={{ padding: '8px 16px', fontSize: '0.85rem', textDecoration: 'none' }}
+        >
+          Kelola Dynamic Feedback Loop &rarr;
+        </Link>
       </div>
 
       {message && (

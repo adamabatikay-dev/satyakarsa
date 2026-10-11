@@ -2,23 +2,33 @@ import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 
 export async function GET() {
-  let fields = await prisma.identityField.findMany({
-    orderBy: { id: 'asc' }
-  });
+  const defaultFields = [
+    { id: 1, name: 'Nama Lengkap', type: 'text' },
+    { id: 2, name: 'Rentang Usia', type: 'select', options: '18-24,25-34,35-44,45-54,55+' },
+    { id: 3, name: 'Domisili (Kota)', type: 'text' }
+  ];
 
-  // Auto-seed defaults if empty
-  if (fields.length === 0) {
-    await prisma.identityField.createMany({
-      data: [
-        { name: 'Nama Lengkap', type: 'text' },
-        { name: 'Rentang Usia', type: 'select', options: '18-24,25-34,35-44,45-54,55+' },
-        { name: 'Domisili (Kota)', type: 'text' }
-      ]
+  try {
+    let fields = await prisma.identityField.findMany({
+      orderBy: { id: 'asc' }
     });
-    fields = await prisma.identityField.findMany({ orderBy: { id: 'asc' } });
-  }
 
-  return NextResponse.json(fields);
+    // Auto-seed defaults if empty
+    if (fields.length === 0) {
+      await prisma.identityField.createMany({
+        data: [
+          { name: 'Nama Lengkap', type: 'text' },
+          { name: 'Rentang Usia', type: 'select', options: '18-24,25-34,35-44,45-54,55+' },
+          { name: 'Domisili (Kota)', type: 'text' }
+        ]
+      });
+      fields = await prisma.identityField.findMany({ orderBy: { id: 'asc' } });
+    }
+
+    return NextResponse.json(fields);
+  } catch (err) {
+    return NextResponse.json(defaultFields);
+  }
 }
 
 export async function POST(request) {

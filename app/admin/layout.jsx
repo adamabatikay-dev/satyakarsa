@@ -44,6 +44,7 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/kriteria" className={pathname === '/admin/kriteria' ? styles.active : ''}>Data Kriteria</Link>
           <Link href="/admin/alternatif" className={pathname === '/admin/alternatif' ? styles.active : ''}>Data Alternatif</Link>
           <Link href="/admin/penilaian" className={pathname === '/admin/penilaian' ? styles.active : ''}>Matriks Keputusan</Link>
+          <Link href="/admin/feedback-loop" className={pathname === '/admin/feedback-loop' ? styles.active : ''}>Dynamic Feedback Loop</Link>
           
           <div style={{ marginTop: '1rem', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', textTransform: 'uppercase', paddingLeft: '1.5rem', fontWeight: 'bold' }}>Fitur Ekstra</div>
           

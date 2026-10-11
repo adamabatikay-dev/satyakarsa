@@ -22,7 +22,8 @@ model Alternative {
   name        String
   description String
 
-  scores AlternativeScore[]
+  scores      AlternativeScore[]
+  evaluations RespondentEvaluation[]
 }
 
 model AlternativeScore {
@@ -79,4 +80,33 @@ model AdminAccessLog {
   userAgent   String?
   status      String
   accessedAt  DateTime   @default(now())
+}
+
+model FeedbackSetting {
+  id             Int       @id @default(autoincrement())
+  isAutoUpdate   Boolean   @default(true)
+  updateMode     String    @default("periodic") // "realtime" | "periodic"
+  batchThreshold Int       @default(5)
+  blendingAlpha  Float     @default(0.5) // 0.0 - 1.0
+  lastSyncedAt   DateTime?
+  updatedAt      DateTime  @default(now())
+}
+
+model RespondentEvaluation {
+  id             Int         @id @default(autoincrement())
+  respondentName String?
+  alternativeId  Int
+  scores         String      // JSON string of { [criteriaId]: score }
+  comment        String?
+  createdAt      DateTime    @default(now())
+
+  alternative    Alternative @relation(fields: [alternativeId], references: [id], onDelete: Cascade)
+}
+
+model FeedbackSyncLog {
+  id              Int      @id @default(autoincrement())
+  syncType        String   // "auto_realtime" | "auto_periodic" | "manual" | "reset"
+  respondentCount Int
+  notes           String?
+  createdAt       DateTime @default(now())
 }

@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 
+import { BASELINE_CRITERIA } from '../../../lib/feedbackLoop';
+
 export async function GET() {
-  const criteria = await prisma.criteria.findMany({
-    orderBy: { id: 'asc' }
-  });
-  return NextResponse.json(criteria);
+  try {
+    const criteria = await prisma.criteria.findMany({
+      orderBy: { id: 'asc' }
+    });
+    if (criteria && criteria.length > 0) {
+      return NextResponse.json(criteria);
+    }
+  } catch (err) {
+    // DB unreachable, return baseline
+  }
+  return NextResponse.json(BASELINE_CRITERIA);
 }
 
 export async function POST(request) {

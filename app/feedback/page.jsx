@@ -38,7 +38,10 @@ export default function Feedback() {
     <div className={styles.container}>
       <div className={`glass-panel ${styles.formCard}`}>
         <h2 className={styles.title} style={{ marginTop: 0 }}>Saran & Kritik</h2>
-        <p className={styles.desc}>Kami sangat menghargai masukan Anda untuk pengembangan sistem SPK ini ke depannya.</p>
+        <p className={styles.desc}>
+          Kami sangat menghargai masukan Anda untuk pengembangan sistem SPK ini ke depannya.
+          Masukan Anda juga dapat melengkapi Dynamic Feedback Loop untuk kalibrasi matriks keputusan sistem.
+        </p>
         
         {success ? (
           <div style={{ padding: '2rem', textAlign: 'center', background: 'rgba(34, 197, 94, 0.1)', borderRadius: '12px', border: '1px solid rgba(34, 197, 94, 0.2)' }}>

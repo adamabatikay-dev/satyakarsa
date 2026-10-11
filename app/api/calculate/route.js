@@ -1,24 +1,28 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 import { calculateSAW } from '../../../lib/saw';
+import { getActiveMatrixForCalculation, BASELINE_CRITERIA } from '../../../lib/feedbackLoop';
 
 export async function POST(request) {
   try {
     const { userWeights } = await request.json();
 
     // 1. Fetch criteria and alternatives with their scores
-    const criteriaList = await prisma.criteria.findMany();
-    const alternatives = await prisma.alternative.findMany({
-      include: {
-        scores: true
-      }
-    });
+    let criteriaList = [];
+    let alternatives = [];
 
-    if (!criteriaList.length || !alternatives.length) {
-      return NextResponse.json(
-        { error: 'Data Kriteria atau Alternatif belum tersedia di database.' },
-        { status: 400 }
-      );
+    try {
+      criteriaList = await prisma.criteria.findMany({ orderBy: { id: 'asc' } });
+      alternatives = await prisma.alternative.findMany({
+        include: { scores: true }
+      });
+    } catch (e) {
+      // Prisma offline, fallback to feedback loop active store
+    }
+
+    if (!criteriaList.length || !alternatives.length || !alternatives[0]?.scores?.length) {
+      criteriaList = BASELINE_CRITERIA;
+      alternatives = await getActiveMatrixForCalculation();
     }
 
     // 2. Perform Calculation
@@ -31,3 +35,4 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Terjadi kesalahan saat menghitung.' }, { status: 500 });
   }
 }
+

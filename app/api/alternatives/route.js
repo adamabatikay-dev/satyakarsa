@@ -1,12 +1,22 @@
 import { NextResponse } from 'next/server';
 import prisma from '../../../lib/prisma';
 
+import { getActiveMatrixForCalculation } from '../../../lib/feedbackLoop';
+
 export async function GET() {
-  const alternatives = await prisma.alternative.findMany({
-    orderBy: { id: 'asc' },
-    include: { scores: true }
-  });
-  return NextResponse.json(alternatives);
+  try {
+    const alternatives = await prisma.alternative.findMany({
+      orderBy: { id: 'asc' },
+      include: { scores: true }
+    });
+    if (alternatives && alternatives.length > 0) {
+      return NextResponse.json(alternatives);
+    }
+  } catch (err) {
+    // DB unreachable, fallback to active matrix store
+  }
+  const alts = await getActiveMatrixForCalculation();
+  return NextResponse.json(alts);
 }
 
 export async function POST(request) {
