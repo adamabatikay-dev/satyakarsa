@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma';
+import { getUserFeedbackList, addUserFeedback } from '../../../lib/feedbackLoop';
 
 export async function GET() {
-  const feedbackList = await prisma.feedback.findMany({
-    orderBy: { createdAt: 'desc' }
-  });
-  return NextResponse.json(feedbackList);
+  try {
+    const feedbackList = await getUserFeedbackList();
+    return NextResponse.json(feedbackList);
+  } catch (error) {
+    return NextResponse.json([]);
+  }
 }
 
 export async function POST(request) {
@@ -15,12 +17,10 @@ export async function POST(request) {
     
     if (!message) return NextResponse.json({ error: 'Pesan wajib diisi' }, { status: 400 });
 
-    const fb = await prisma.feedback.create({
-      data: { name: name || 'Anonim', message }
-    });
-    
+    const fb = await addUserFeedback({ name, message });
     return NextResponse.json(fb);
   } catch (error) {
+    console.error('Feedback POST error:', error);
     return NextResponse.json({ error: 'Gagal menyimpan saran' }, { status: 500 });
   }
 }

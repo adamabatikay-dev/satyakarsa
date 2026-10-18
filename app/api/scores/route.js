@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma';
+import { saveManualAlternativeScores } from '../../../lib/feedbackLoop';
 
 export async function POST(request) {
   try {
@@ -10,27 +10,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Format data tidak valid' }, { status: 400 });
     }
 
-    // Using transaction to upsert multiple scores
-    const operations = scores.map(score => {
-      return prisma.alternativeScore.upsert({
-        where: {
-          alternativeId_criteriaId: {
-            alternativeId: score.alternativeId,
-            criteriaId: score.criteriaId
-          }
-        },
-        update: {
-          value: score.value
-        },
-        create: {
-          alternativeId: score.alternativeId,
-          criteriaId: score.criteriaId,
-          value: score.value
-        }
-      });
-    });
-
-    await prisma.$transaction(operations);
+    await saveManualAlternativeScores(scores);
 
     return NextResponse.json({ message: 'Nilai berhasil disimpan' });
   } catch (error) {

@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma';
+import { getRecommendationRecords, addRecommendationRecord } from '../../../lib/feedbackLoop';
 
 export async function GET() {
   try {
-    const records = await prisma.recommendationRecord.findMany({
-      orderBy: { createdAt: 'desc' }
-    });
+    const records = await getRecommendationRecords();
     return NextResponse.json(records);
   } catch (err) {
     return NextResponse.json([]);
@@ -17,17 +15,16 @@ export async function POST(request) {
     const body = await request.json();
     const { identityData, topAlternativeId, topAlternativeName, score } = body;
     
-    const record = await prisma.recommendationRecord.create({
-      data: {
-        identityData: JSON.stringify(identityData),
-        topAlternativeId: parseInt(topAlternativeId),
-        topAlternativeName,
-        score: parseFloat(score)
-      }
+    const record = await addRecommendationRecord({
+      identityData,
+      topAlternativeId,
+      topAlternativeName,
+      score
     });
     
     return NextResponse.json(record);
   } catch (error) {
+    console.error('Records POST error:', error);
     return NextResponse.json({ error: 'Gagal menyimpan riwayat' }, { status: 500 });
   }
 }

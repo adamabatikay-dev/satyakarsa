@@ -4,44 +4,44 @@
     "updateMode": "periodic",
     "batchThreshold": 5,
     "blendingAlpha": 0.5,
-    "lastSyncedAt": "2026-10-11T13:20:12.466Z"
+    "lastSyncedAt": "2026-10-11T13:33:53.591Z"
   },
   "currentMatrix": {
     "1": {
-      "1": 1.5,
-      "2": 3.625,
-      "3": 3.625,
-      "4": 3.688,
-      "5": 3.75,
-      "6": 4.063,
-      "7": 3.5
+      "1": 1.75,
+      "2": 4.0625,
+      "3": 4.0625,
+      "4": 4.094,
+      "5": 4.125,
+      "6": 4.2815,
+      "7": 4
     },
     "2": {
-      "1": 1.556,
-      "2": 3.889,
-      "3": 3.722,
-      "4": 3.889,
-      "5": 4,
-      "6": 4.167,
-      "7": 3.667
+      "1": 1.578,
+      "2": 4.0445,
+      "3": 3.861,
+      "4": 3.9445,
+      "5": 3.95,
+      "6": 4.2335,
+      "7": 3.6835
     },
     "3": {
-      "1": 1.333,
-      "2": 3.75,
-      "3": 3.75,
-      "4": 4,
-      "5": 4.083,
-      "6": 3.917,
-      "7": 3.667
+      "1": 1.3665,
+      "2": 3.775,
+      "3": 3.775,
+      "4": 4.05,
+      "5": 4.1415,
+      "6": 3.9585,
+      "7": 3.7335
     },
     "4": {
-      "1": 1.846,
-      "2": 4.077,
-      "3": 3.769,
-      "4": 3.846,
-      "5": 3.846,
-      "6": 4.077,
-      "7": 3.846
+      "1": 1.873,
+      "2": 4.0885,
+      "3": 3.7845,
+      "4": 3.873,
+      "5": 3.873,
+      "6": 4.0885,
+      "7": 3.923
     },
     "5": {
       "1": 1.667,
@@ -54,6 +54,22 @@
     }
   },
   "evaluations": [
+    {
+      "id": 5,
+      "respondentName": "Adam",
+      "alternativeId": 3,
+      "scores": {
+        "1": 5,
+        "2": 1,
+        "3": 2,
+        "4": 3,
+        "5": 3,
+        "6": 3,
+        "7": 5
+      },
+      "comment": "Bagus",
+      "createdAt": "2026-10-18T12:55:56.949Z"
+    },
     {
       "id": 4,
       "respondentName": "Tester UMKM Batik",
@@ -121,6 +137,20 @@
   ],
   "syncLogs": [
     {
+      "id": 5,
+      "syncType": "manual",
+      "respondentCount": 4,
+      "notes": "Sinkronisasi manual matriks keputusan dipicu oleh Administrator.",
+      "createdAt": "2026-10-11T13:33:53.591Z"
+    },
+    {
+      "id": 4,
+      "syncType": "manual",
+      "respondentCount": 4,
+      "notes": "Sinkronisasi manual matriks keputusan dipicu oleh Administrator.",
+      "createdAt": "2026-10-11T13:33:35.631Z"
+    },
+    {
       "id": 3,
       "syncType": "reset",
       "respondentCount": 0,
@@ -140,6 +170,24 @@
       "respondentCount": 3,
       "notes": "Inisialisasi sistem dynamic feedback loop dengan parameter dasar.",
       "createdAt": "2026-10-11T13:17:52.442Z"
+    }
+  ],
+  "userFeedbacks": [
+    {
+      "id": 1,
+      "name": "Adam",
+      "message": "Ini hanya tes",
+      "createdAt": "2026-10-18T13:05:33.628Z"
+    }
+  ],
+  "records": [
+    {
+      "id": 1,
+      "identityData": "{\"nama\":\"Adam\"}",
+      "topAlternativeId": 1,
+      "topAlternativeName": "Instagram",
+      "score": 0.95,
+      "createdAt": "2026-10-18T13:06:18.491Z"
     }
   ]
 }

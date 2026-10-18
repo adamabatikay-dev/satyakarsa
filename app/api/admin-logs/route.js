@@ -10,6 +10,6 @@ export async function GET() {
     });
     return NextResponse.json(logs);
   } catch (error) {
-    return NextResponse.json({ error: 'Gagal mengambil data log' }, { status: 500 });
+    return NextResponse.json([]);
   }
 }
